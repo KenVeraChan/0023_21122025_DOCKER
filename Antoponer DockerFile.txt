@@ -1,0 +1,1 @@
+En todos los proyectos se debe crear el fichero dockerfile para trabajar con los diversos contenedores
