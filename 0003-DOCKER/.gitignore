@@ -1,0 +1,19 @@
+# NODE.JS dependencias
+node_modules/
+
+#logs no incluidos
+logs
+*.log
+npm-debug.log*
+
+# OS archivos no se incluyen archivos del sistema operativo
+.DS_Store
+
+# Archivos de distribución
+dist/
+build/
+
+# Archivos de entorno, variables y codigos privados
+.env
+.env.local
+.env.*.local    

@@ -1,0 +1,37 @@
+.dev: es un fichero que no se deberá subir al repositorio de GITHUB
+Es donde irán todas las claves y accesos a las BBDD
+
+npm install pg: es la dependencia necesaria para conectarse a la BBDD
+
+npm install express: para instalar la dependencia de express de creación de servidores
+
+npm init -y: para iniciar el npm instalador
+
+docker-compose.yml: cuando se quieran hacer varias dockerizaciones con varios contenedores en una aplicación
+
+
+
+services:
+  app:
+    build: .
+    ports:
+      - "4000:3000"
+    environment:
+      PGUSER: ${PGUSER}
+      PGPASSWORD: ${PGPASSWORD}
+      PGHOST: ${PGHOST}
+      PGDATABASE: ${PGDATABASE}
+      PGPORT: ${PGPORT}
+    depends_on:
+      - db
+  
+  db:
+    image: postgres
+    environment:
+      POSTGRES_PASSWORD: ${PGPASSWORD}
+
+
+se crea antes el contenedor que luego acudirá a la creación de la BBDD porque de hacerlo antes dará fallo
+por eso de pone: "depends_on" para que se cree y luego se invoque.
+
+El docker yamel concatena dos contenedores, pero el fichero dockerfile es quien gobierna en la creacion de la imagen para docker node:18
