@@ -13,6 +13,18 @@ services:
       - db
   
   db:
-    image: postgres
+    image: postgres:16
     environment:
       POSTGRES_PASSWORD: ${PGPASSWORD}
+    volumes:
+      - BBDDPostgreStock:/var/lib/postgresql/data
+      #Esto guarda los datos de la BBDD en un volumen para que no se pierdan al reiniciar el contenedor
+      #Imagen de DOCKER de una base de datos POSTGRESSQL
+volumes:
+  BBDDPostgreStock:
+  #Volumen para almacenar los datos de la base de datos PostgreSQL
+# Nombre del volumen: BBDDPostgreStock
+# Ruta en el contenedor: /var/lib/postgresql/data
+# Este volumen asegura que los datos de la base de datos persistan incluso si el contenedor
+# External=true, solo si el volumen ya existe, no se crea uno nuevo, si no se pone nada o false, se crea uno nuevo
+    

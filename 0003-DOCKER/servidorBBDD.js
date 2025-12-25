@@ -20,6 +20,9 @@ app.get('/', async (req, res) => {   // Ruta para obtener datos de la base de da
         res.status(500).json({ error: 'Error al obtener datos' });
     }
 });
+app.get('/home',(req,res)=>{
+    res.send('Bienvenido a la página de inicio');   
+});
 app.listen(3000, () => {
     console.log('Servidor escuchando en el puerto 3000');
 });
