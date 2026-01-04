@@ -23,6 +23,17 @@ app.get('/', async (req, res) => {   // Ruta para obtener datos de la base de da
 app.get('/home',(req,res)=>{
     res.send('Bienvenido a la página de inicio');   
 });
+app.get('/usuarios',async(req,res)=>{
+    try{
+        const BBDD= await pool.query('SELECT * FROM usuarios'); // Consulta para obtener todos los registros de la tabla 'usuarios'
+        let texto = ''; 
+        BBDD.rows.forEach(row => { texto += `ID: ${row.id} - Usuaria: ${row.nombre} ${row.apellidos}<br>`; }); 
+        res.send(texto); 
+    }catch(error){
+        console.error('Error al obtener usuarios:', error);
+        res.status(500).json({ error: 'Error al obtener usuarios' });
+    }   
+});
 app.listen(3000, () => {
     console.log('Servidor escuchando en el puerto 3000');
 });
