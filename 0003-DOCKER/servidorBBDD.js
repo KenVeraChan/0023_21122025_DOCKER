@@ -10,6 +10,8 @@ const pool = new Pool({          //Datos de conexión a la base de datos acudien
     database: process.env.PGDATABASE,
 });
 
+app.use(express.json()); // Middleware para parsear JSON en las solicitudes entrantes
+
 app.get('/', async (req, res) => {   // Ruta para obtener datos de la base de datos
     try {
         const result = await pool.query('SELECT NOW()'); // SELECT NOW() es una consulta simple que devuelve la fecha y hora actuales del servidor de la base de datos
@@ -27,7 +29,7 @@ app.get('/usuarios',async(req,res)=>{
     try{
         const BBDD= await pool.query('SELECT * FROM usuarios'); // Consulta para obtener todos los registros de la tabla 'usuarios'
         let texto = ''; 
-        BBDD.rows.forEach(row => { texto += `ID: ${row.id} - Usuaria: ${row.nombre} ${row.apellidos}<br>`; }); 
+        BBDD.rows.forEach(row => { texto += `ID: ${row.id} - Usuaria: ${row.nombre} ${row.apellidos} - Edad: ${row.edad} - Calificacion: ${row.calificacion}<br>`; }); 
         res.send(texto); 
     }catch(error){
         console.error('Error al obtener usuarios:', error);
@@ -36,4 +38,18 @@ app.get('/usuarios',async(req,res)=>{
 });
 app.listen(3000, () => {
     console.log('Servidor escuchando en el puerto 3000');
+});
+
+/*APARTADO DE AGREGAR DATOS*/
+app.post('/agregarUsuario', async (req, res) => {
+    const { nombre, apellidos, edad, calificacion, stock } = req.body; // Extrae los datos del cuerpo de la solicitud
+    try {
+        const query = 'INSERT INTO usuarios (nombre, apellidos, edad, calificacion, stock) VALUES ($1, $2, $3, $4, $5) RETURNING *';
+        const values = [nombre, apellidos, edad, calificacion, stock]; // Valores a insertar
+        const result = await pool.query(query, values); // Ejecuta la consulta de inserción
+        res.status(201).json({ message: 'Usuario agregado', usuario: result.rows[0] }); // Devuelve el usuario agregado
+    } catch (error) {
+        console.error('Error al agregar usuario:', error);
+        res.status(500).json({ error: 'Error al agregar usuario' });
+    }
 });
